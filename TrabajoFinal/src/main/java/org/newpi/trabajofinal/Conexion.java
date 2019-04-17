@@ -22,9 +22,9 @@ public class Conexion {
     Statement stmt;
 
     public Conexion() throws ClassNotFoundException, SQLException {
-        String urlDatabase = "jdbc:mysql://localhost/hopital";
+        String urlDatabase = "jdbc:mysql://localhost:3309/hopital";
         Class.forName("com.mysql.jdbc.Driver");
-        conn = DriverManager.getConnection(urlDatabase, "root", "");
+        conn = DriverManager.getConnection(urlDatabase, "root", "root");
         stmt = conn.createStatement();
     }
 
@@ -117,13 +117,15 @@ public class Conexion {
     
     public List<Object[]> patientReport1() throws SQLException {
         List<Object[]> result = new ArrayList<>();
-        String query = "SELECT COUNT(*) AS number, code_service, service.nom AS nameservice  FROM malade INNER JOIN hospitalisation ON malade.numero=hospitalisation.no_malade INNER JOIN service ON hospitalisation.code_service=service.code GROUP BY code_service";
+        String query = "SELECT COUNT(*) AS number, code_service, service.nom AS nameservice  "
+                + "FROM malade INNER JOIN hospitalisation ON malade.numero=hospitalisation.no_malade INNER JOIN service"
+                + " ON hospitalisation.code_service=service.code GROUP BY code_service";
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
             Object[] row = new Object[2];
             row[0] = rs.getInt("number");
             row[1] = rs.getString("nameservice");
-            result.add(row);
+            result.add(row);    
         }
         return result;
     }
