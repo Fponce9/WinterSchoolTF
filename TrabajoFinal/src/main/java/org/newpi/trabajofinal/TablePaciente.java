@@ -89,17 +89,5 @@ public class TablePaciente extends AbstractTableModel {
     
     public String getNumeroAt(int rowIndex) {
         return this.getPatientAt(rowIndex).getNumero();
-    }
-    
-    @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    }
-
-    @Override
-    public void addTableModelListener(TableModelListener l) {
-    }
-
-    @Override
-    public void removeTableModelListener(TableModelListener l) {
-    }
+    }    
 }

@@ -7,7 +7,11 @@ public class Enfermera {
     private String numero;
     private String codServicio;
     private String rotacion;
-    private String Salario,nombre,apellido,telefono,direccion;
+    private String Salario;
+    private String nombre;
+    private String apellido;
+    private String telefono;
+    private String direccion;
 
     public Enfermera() {
         this("","","","","","","","");

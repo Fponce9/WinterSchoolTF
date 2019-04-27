@@ -6,41 +6,23 @@
 package org.newpi.trabajofinal;
 
 import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.View;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultKeyedValuesDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.ChartUtils;
 
@@ -52,6 +34,7 @@ import org.jfree.chart.ChartUtils;
 
 public class Frame1 extends javax.swing.JFrame {
 
+    public static final String ERROR = "Ocurrio un error";
     TablePaciente tbp = new TablePaciente();
     TableEnfermera tbe = new TableEnfermera();
     ImageIcon addIcon;
@@ -62,8 +45,8 @@ public class Frame1 extends javax.swing.JFrame {
     ImageIcon favIcon;
     boolean modificado;
     String oldnum,oldnumEnfer;
-    public static int IMAGE_WIDTH = 640;
-    public static int IMAGE_HEIGHT = 480;
+    public static final int IMAGE_WIDTH = 640;
+    public static final int IMAGE_HEIGHT = 480;
     
     /**
      * Creates new form Frame1
@@ -78,34 +61,28 @@ public class Frame1 extends javax.swing.JFrame {
         initComponents();
         this.setIconImage(favIcon.getImage());
         tbPatients.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tbPatients.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-              if( tbPatients.getSelectedRow()==-1)
-                {
+        tbPatients.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if( tbPatients.getSelectedRow()==-1)
+            {
                 btnModificarPaciente.setEnabled(false);
                 btnEliminarPaciente.setEnabled(false);
-                }
-                else{
+            }
+            else{
                 btnModificarPaciente.setEnabled(true);
-                btnEliminarPaciente.setEnabled(true);                
-              }
+                btnEliminarPaciente.setEnabled(true);
             }
         });
         tbNurses.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tbNurses.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if(tbNurses.getSelectedRow()==-1)
-                {
+        tbNurses.getSelectionModel().addListSelectionListener((ListSelectionEvent e) -> {
+            if(tbNurses.getSelectedRow()==-1)
+            {
                 btnModificarAdmin.setEnabled(false);
                 btnEliminarEnfermera.setEnabled(false);
-                }
-                else 
-                {
-                  btnModificarAdmin.setEnabled(true);
-                  btnEliminarEnfermera.setEnabled(true);
-                }
+            }
+            else
+            {
+                btnModificarAdmin.setEnabled(true);
+                btnEliminarEnfermera.setEnabled(true);
             }
         });
         int patientCount = 0, doctorCount = 0;
@@ -117,7 +94,7 @@ public class Frame1 extends javax.swing.JFrame {
             salaireSum = conn.nurseSalaireSum();
         } catch(ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
         lblPatientCount.setText(Integer.toString(patientCount));
         lblDoctorCount.setText(Integer.toString(doctorCount));
@@ -1150,7 +1127,7 @@ public class Frame1 extends javax.swing.JFrame {
                tbp.filter(txtNumber.getText(), txtName.getText(), txtService.getText());
                 tbPatients.repaint();
            } catch (ClassNotFoundException | SQLException ex) {
-               JOptionPane.showMessageDialog(this, ex.getStackTrace(), "Ocurrió un problema", JOptionPane.ERROR_MESSAGE);
+               JOptionPane.showMessageDialog(this, ex.getStackTrace(), ERROR, JOptionPane.ERROR_MESSAGE);
            }
        }
     }//GEN-LAST:event_btnEliminarPacienteActionPerformed
@@ -1213,8 +1190,7 @@ public class Frame1 extends javax.swing.JFrame {
         tbPatients.clearSelection();
         dialogAgregarPaciente.setVisible(false);
         } catch (ClassNotFoundException|SQLException ex) {
-               JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un problema", JOptionPane.ERROR_MESSAGE);
-               ex.printStackTrace();
+               JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 private void Limpiar()
@@ -1306,8 +1282,7 @@ private void LimpiarEnfer()
         tbNurses.clearSelection();
         dialogAgregarEnfermera.setVisible(false);
         } catch (ClassNotFoundException |SQLException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un problema", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         } 
         
     }//GEN-LAST:event_btnSave1ActionPerformed
@@ -1365,7 +1340,7 @@ private void LimpiarEnfer()
                 tbNurses.repaint();
                 tbNurses.clearSelection();
             } catch (ClassNotFoundException |SQLException ex ) {
-                JOptionPane.showMessageDialog(this, ex.getStackTrace(), "Ocurrió un problema", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, ex.getStackTrace(), ERROR, JOptionPane.ERROR_MESSAGE);
             }
 
         }
@@ -1408,8 +1383,7 @@ private void LimpiarEnfer()
             result.stream().forEach(o -> { dataset.setValue((int)o[0], "# Pacientes", (String)o[1]); });
         }
         catch(ClassNotFoundException | SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
         JFreeChart chart = ChartFactory.createBarChart("Pacientes por Servicio Ofrecido", "Servicios", "# Pacientes", dataset, PlotOrientation.VERTICAL, false, true, false);      
         JFrame frame = new JFrame("Pacientes por Servicio ofrecido");
@@ -1424,7 +1398,7 @@ private void LimpiarEnfer()
                     ChartUtils.saveChartAsPNG(file, chart, IMAGE_WIDTH, IMAGE_HEIGHT);
                     JOptionPane.showMessageDialog(frame, "Se guardó la imagen en: " + file.getAbsolutePath());
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -1441,7 +1415,7 @@ private void LimpiarEnfer()
         }
         catch(ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
         JFreeChart chart = ChartFactory.createBarChart("Doctores por Especialidad", "Especialidad", "# Doctores", dataset, PlotOrientation.HORIZONTAL, false, true, false);
         JFrame frame = new JFrame("Doctores por Especialidad");
@@ -1456,7 +1430,7 @@ private void LimpiarEnfer()
                     ChartUtils.saveChartAsPNG(file, chart, IMAGE_WIDTH, IMAGE_HEIGHT);
                     JOptionPane.showMessageDialog(frame, "Se guardó la imagen en: " + file.getAbsolutePath());
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -1473,7 +1447,7 @@ private void LimpiarEnfer()
         }
         catch(ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
         JFreeChart chart = ChartFactory.createBarChart("Enfermeras por Especialidad y Turno", "Especialidad", "# Enfermeras", dataset, PlotOrientation.VERTICAL, true, true, false);
         JFrame frame = new JFrame("Enfermeras por Turno y Servicio");
@@ -1488,7 +1462,7 @@ private void LimpiarEnfer()
                     ChartUtils.saveChartAsPNG(file, chart, IMAGE_WIDTH, IMAGE_HEIGHT);
                     JOptionPane.showMessageDialog(frame, "Se guardó la imagen en: " + file.getAbsolutePath());
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -1505,7 +1479,7 @@ private void LimpiarEnfer()
         }
         catch(ClassNotFoundException | SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
         JFreeChart chart = ChartFactory.createPieChart("Enfermeras por turno", dataset);
         JFrame frame = new JFrame("Enfermeras por Turno");
@@ -1520,7 +1494,7 @@ private void LimpiarEnfer()
                     ChartUtils.saveChartAsPNG(file, chart, IMAGE_WIDTH, IMAGE_HEIGHT);
                     JOptionPane.showMessageDialog(frame, "Se guardó la imagen en: " + file.getAbsolutePath());
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(frame, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -1538,7 +1512,7 @@ private void LimpiarEnfer()
         }
         catch(IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportNursesToCSVActionPerformed
 
@@ -1550,7 +1524,7 @@ private void LimpiarEnfer()
         }
         catch(IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportNursesToExcelActionPerformed
 
@@ -1562,7 +1536,7 @@ private void LimpiarEnfer()
         }
         catch(IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportPatientsToExcelActionPerformed
 
@@ -1574,7 +1548,7 @@ private void LimpiarEnfer()
         }
         catch(IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ocurrió un error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), ERROR, JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnExportPatientsToCSVActionPerformed
 

@@ -7,11 +7,8 @@ package org.newpi.trabajofinal;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -82,14 +79,7 @@ public class TableEnfermera extends AbstractTableModel {
         return val;
     }
 
-    @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    }
-
-    @Override
-    public void addTableModelListener(TableModelListener l) {
-    }
-     public void filter(String code, String name, String surname) {
+        public void filter(String code, String name, String surname) {
         try {
             enfermeras = new Conexion().getAllNurses();
             if(!code.isEmpty())
@@ -105,10 +95,7 @@ public class TableEnfermera extends AbstractTableModel {
         }    
     }
 
-    @Override
-    public void removeTableModelListener(TableModelListener l) {
-    }
-    
+        
     public Enfermera getEnfermeraAt(int rowIndex)
     {
         return enfermeras.get(rowIndex);

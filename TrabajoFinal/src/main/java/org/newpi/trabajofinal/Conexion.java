@@ -12,18 +12,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Proyecto
  */
 public class Conexion {
+    public static final String NUMERO = "number";
       Connection conn;
     Statement stmt;
 
     public Conexion() throws ClassNotFoundException, SQLException {
         String urlDatabase = "jdbc:mysql://localhost:3309/hopital";
-        Class.forName("com.mysql.jdbc.Driver");
         conn = DriverManager.getConnection(urlDatabase, "root", "root");
         stmt = conn.createStatement();
     }
@@ -35,8 +37,10 @@ public class Conexion {
     ArrayList<Enfermera> getAllNurses() throws SQLException {
         String query = "SELECT infirmier.numero,nom,prenom,adresse,tel,code_service,rotation,salaire from infirmier "
                 + "inner join employe on employe.numero=infirmier.numero;";
-        ResultSet rs = stmt.executeQuery(query);
         ArrayList<Enfermera> resultado = new ArrayList<>();
+        try{
+        ResultSet rs = stmt.executeQuery(query);
+        
         while(rs.next()) {
             resultado.add(new Enfermera(
                     "" 
@@ -49,6 +53,9 @@ public class Conexion {
                     rs.getString("rotation"),
                     rs.getString("salaire")
             ));
+        }
+        }
+        catch (SQLException ex){
         }
         return resultado;
     }
@@ -85,32 +92,48 @@ public class Conexion {
     }
     
     
-    public int patientCount() throws SQLException {
-        String query = "SELECT COUNT(*) AS number FROM malade";
-        ResultSet rs = stmt.executeQuery(query);
+    public int patientCount() {
         int patientCount = 0;
-        while(rs.next()) {
-            patientCount = rs.getInt("number");
+        try {
+            String query = "SELECT COUNT(*) AS number FROM malade";
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while(rs.next()) {
+                patientCount = rs.getInt(NUMERO);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return patientCount;
+            return patientCount;
     }
     
-    public int doctorCount() throws SQLException {
-        String query = "SELECT COUNT(*) AS number FROM docteur";
-        ResultSet rs = stmt.executeQuery(query);
+    public int doctorCount() {
         int doctorCount = 0;
-        while(rs.next()) {
-            doctorCount = rs.getInt("number");
+        try {
+            String query = "SELECT COUNT(*) AS number FROM docteur";
+            ResultSet rs = stmt.executeQuery(query);
+            
+            while(rs.next()) {
+                doctorCount = rs.getInt(NUMERO);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return doctorCount;
     }
     
-    public double nurseSalaireSum() throws SQLException {
-        String query = "SELECT SUM(salaire) AS number FROM infirmier";
-        ResultSet rs = stmt.executeQuery(query);
+    public double nurseSalaireSum() {
         double salaireSum = 0;
-        while(rs.next()) {
-            salaireSum = rs.getDouble("number");
+        try {
+            String query = "SELECT SUM(salaire) AS number FROM infirmier";
+            ResultSet rs = stmt.executeQuery(query);            
+            while(rs.next()) {
+                salaireSum = rs.getDouble(NUMERO);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return salaireSum;
     }
@@ -123,22 +146,27 @@ public class Conexion {
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
             Object[] row = new Object[2];
-            row[0] = rs.getInt("number");
+            row[0] = rs.getInt(NUMERO);
             row[1] = rs.getString("nameservice");
             result.add(row);    
         }
         return result;
     }
     
-    public List<Object[]> doctorReport1() throws SQLException {
+    public List<Object[]> doctorReport1() {
         List<Object[]> result = new ArrayList<>();
-        String query = "SELECT COUNT(*) AS number, specialite FROM docteur GROUP BY specialite ORDER BY number DESC";
-        ResultSet rs = stmt.executeQuery(query);
-        while(rs.next()) {
-            Object[] row = new Object[2];
-            row[0] = rs.getInt("number");
-            row[1] = rs.getString("specialite");
-            result.add(row);
+        try {            
+            String query = "SELECT COUNT(*) AS number, specialite FROM docteur GROUP BY specialite ORDER BY number DESC";
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                Object[] row = new Object[2];
+                row[0] = rs.getInt(NUMERO);
+                row[1] = rs.getString("specialite");
+                result.add(row);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
@@ -149,7 +177,7 @@ public class Conexion {
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
             Object[] row = new Object[2];
-            row[0] = rs.getInt("number");
+            row[0] = rs.getInt(NUMERO);
             row[1] = rs.getString("rotation");
             result.add(row);
         }
@@ -162,7 +190,7 @@ public class Conexion {
         ResultSet rs = stmt.executeQuery(query);
         while(rs.next()) {
             Object[] row = new Object[3];
-            row[0] = rs.getInt("number");
+            row[0] = rs.getInt(NUMERO);
             row[1] = rs.getString("service.nom");
             row[2] = rs.getString("infirmier.rotation");
             result.add(row);
