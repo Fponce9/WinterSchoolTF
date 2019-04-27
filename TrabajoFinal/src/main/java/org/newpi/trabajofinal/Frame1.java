@@ -1358,6 +1358,8 @@ private void LimpiarEnfer()
         tbe.filter(txtCodEnfer.getText(), txtCodNom.getText(), txtCodApell.getText());
         tbNurses.repaint();
         tbNurses.clearSelection();
+        
+        
     }//GEN-LAST:event_txtCodEnferKeyReleased
 
     private void txtCodEnferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodEnferActionPerformed
